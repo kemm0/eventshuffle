@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 
 const voteSchema = mongoose.Schema({
     date: {
@@ -11,7 +12,8 @@ const voteSchema = mongoose.Schema({
 const eventSchema = mongoose.Schema({
     id: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     name: {
         type: String,
@@ -24,6 +26,15 @@ const eventSchema = mongoose.Schema({
         type: [voteSchema]
     }
 });
+
+eventSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+eventSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('Event', eventSchema);
 
