@@ -1,30 +1,28 @@
 const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
-const voteSchema = mongoose.Schema({
-    date: {
-        type: Date,
-        required: true
-    },
-    people: [String]
-});
-
 const eventSchema = mongoose.Schema({
     id: {
         type: String,
         required: true,
         unique: true
     },
+    dates: {
+        type: [String],
+        required: true
+    },
     name: {
         type: String,
         required: true
     },
-    people: {
-        type: [String]
-    },
-    votes: {
-        type: [voteSchema]
-    }
+    people: [String],
+    votes: [{
+        date: {
+            type: String,
+            required: true,
+        },
+        people: [String]
+    }]
 });
 
 eventSchema.set('toJSON', {
