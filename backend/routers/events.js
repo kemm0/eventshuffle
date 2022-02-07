@@ -55,10 +55,44 @@ eventsRouter.post('/:id/vote', async (req,res) => {
         }
     }
 
-    const savedEvent = await Event.findOneAndUpdate({ id: req.params.id }, { votes: event.votes }, { new: true });
+    const updatedVals = {
+        votes: event.votes,
+        people: event.people
+    };
+
+    const savedEvent = await Event.findOneAndUpdate({ id: req.params.id }, updatedVals, { new: true });
 
     return res.json(savedEvent);
 
+});
+
+eventsRouter.get('/:id/results', async (req, res) => {
+    const event = await Event.findOne({ id: req.params.id });
+
+    const isSuitable = (peopleTotal, voters) => {
+        for(const name of peopleTotal){
+            if(!voters.includes(name)){
+                return false;
+            }
+        }
+        return true;
+    };
+
+    let suitableDates = [];
+
+    for(const vote of event.votes){
+        if(isSuitable(event.people, vote.people)){
+            suitableDates.push(vote);
+        }
+    }
+
+    const result = {
+        id: event.id,
+        name: event.name,
+        suitableDates: suitableDates
+    };
+
+    return res.json(result);
 });
 
 eventsRouter.get('/:id', async (req, res) => {
