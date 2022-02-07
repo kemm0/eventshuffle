@@ -3,7 +3,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 const eventSchema = mongoose.Schema({
     id: {
-        type: String,
+        type: Number,
         required: true,
         unique: true
     },

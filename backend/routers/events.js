@@ -1,4 +1,4 @@
-const { randomUUID } = require('crypto');
+const { int64bitID } = require('../utils/generate-id');
 const eventsRouter = require('express').Router();
 const Event = require('../models/event');
 
@@ -124,7 +124,7 @@ eventsRouter.post('/', async (req, res) => {
         name: name,
         dates: dates,
         votes: initVotes,
-        id: randomUUID()
+        id: int64bitID()
     });
 
     const savedEvent = await event.save();
